@@ -1,5 +1,4 @@
 import json
-
 import requests
 from settings import hug_token
 
@@ -14,4 +13,7 @@ def query(filename):
     return json.loads(response.content.decode("utf-8"))
 
 
-output = query("sample1.flac")
+if __name__ == '__main__':
+    import pprint
+    pprint.pprint(query(r'01. Felix Jaehn & Ray Dalton - Call It Love.mp3'))
+
