@@ -6,7 +6,7 @@ API_URL = "https://api-inference.huggingface.co/models/ehcalabres/wav2vec2-lg-xl
 headers = {"Authorization": f"Bearer {hug_token}"}
 
 
-def query(filename):
+def music_analis(filename):
     with open(filename, "rb") as f:
         data = f.read()
     response = requests.request("POST", API_URL, headers=headers, data=data)
@@ -15,5 +15,5 @@ def query(filename):
 
 if __name__ == '__main__':
     import pprint
-    pprint.pprint(query(r'01. Felix Jaehn & Ray Dalton - Call It Love.mp3'))
+    pprint.pprint(music_analis(r'01. Felix Jaehn & Ray Dalton - Call It Love.mp3'))
 

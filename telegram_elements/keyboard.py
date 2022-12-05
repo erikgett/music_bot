@@ -22,3 +22,15 @@ def keyboard_bool(message, question):
             bot.send_message(call.message.chat.id, 'ДААА')
         elif call.data == "no":
             bot.send_message(call.message.chat.id, 'Неет')
+
+
+def keyboard_menu(mesg):
+    menu_btms = types.InlineKeyboardMarkup()
+    samples = types.InlineKeyboardButton(text='История', callback_data='history')
+    scripts = types.InlineKeyboardButton(text='О создателях', callback_data='creater')
+    help = types.InlineKeyboardButton(text='Помощь', callback_data='helper')
+    menu_btms.add(samples, scripts, help)
+    try:
+        bot.send_message(mesg.message.chat.id, text='Ждем ваше письмо!:', reply_markup=menu_btms)
+    except:
+        bot.send_message(mesg.from_user.id, text='Ждем ваше письмо!:', reply_markup=menu_btms)
