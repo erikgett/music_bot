@@ -2,6 +2,8 @@ from settings import bot
 from telegram_elements.keyboard import keyboard_bool, keyboard_menu
 from telegram_elements.messages import hello_message, creaters, help_message
 
+def send_audio():
+    pass
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -9,8 +11,6 @@ def get_text_messages(message):
     if '/start' in message.text:
         bot.send_message(message.from_user.id, hello_message)
         keyboard_menu(message)
-
-
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
