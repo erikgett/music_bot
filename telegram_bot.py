@@ -5,15 +5,23 @@ from files_analisers.picture_analiser import pick_query
 from files_analisers.text_analiser import text_analis
 import random
 from googletrans import Translator
-
+from trans import word_trans
 
 
 def send_audio_play_list(text_emotion):
-    pass
+    slovaric = {'acousticness': ['caring', 'confusion', 'sadness', 'pride', 'relief'],
+                'danceability': ['curiosity', 'amusement', 'surprise'],
+                'energy': ['optimism', 'excitement', 'disgust', 'fear'],
+                'liveness': ['love', 'approval', 'joy', 'neutral', 'realization'],
+                'loudness': ['admiration', 'annoyance', 'disappointment', 'anger'],
+                'speechiness': ['desire', 'remorse', 'grief'],
+                'valence': ['gratitude', 'disapproval', 'embarrassment', 'nervousness']}
+
+    # вернуть пути к файлам музыки
+    return 1111
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-
     if '/start' in message.text:
         bot.send_message(message.from_user.id, hello_message)
         keyboard_menu(message)
@@ -21,20 +29,17 @@ def get_text_messages(message):
     else:
         bot.send_message(message.from_user.id, 'Ваше сообщение обрабатывается, вскоре вы получите плейлист)')
         try:
-            translator = Translator()
-            perevod = translator.translate(message.text, src='ru', dest='en')
-            print(perevod.text)
+            perevod = word_trans(message.text)
         except Exception as e:
-            print(e)
             perevod = 'hi'
         text_emotion = text_analis(perevod)[0][0]['label']
-
-        print(text_emotion)
+        playlist = send_audio_play_list(text_emotion)
+        # отослать плейлист
         bot.send_message(message.from_user.id, text_emotion)
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
-
     if call.data == 'Menu':
         keyboard_menu(call)
 
@@ -67,5 +72,8 @@ def photo(message):
     # ВОТ ТУТ определелено что находится на картиночке и эмоциональная окраска сообщения
     text_emotion = text_analis(what_in_pickture)[0][0]['label']
     print(text_emotion)
+    playlist = send_audio_play_list(text_emotion)
+    # отослать плейлист
+
 
 bot.polling(none_stop=True, interval=0)
