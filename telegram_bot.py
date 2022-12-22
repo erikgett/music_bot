@@ -6,19 +6,42 @@ from files_analisers.text_analiser import text_analis
 import random
 from googletrans import Translator
 from trans import word_trans
+import pandas as pd
+import os
 
+def gen_path(name):
+
+    print(os.getcwd())
+    pat = os.getcwd()+f'\\music\\{name}.mp3'
+    print(pat)
+    return pat
 
 def send_audio_play_list(text_emotion):
+    print(text_emotion)
     slovaric = {'acousticness': ['caring', 'confusion', 'sadness', 'pride', 'relief'],
                 'danceability': ['curiosity', 'amusement', 'surprise'],
-                'energy': ['optimism', 'excitement', 'disgust', 'fear'],
-                'liveness': ['love', 'approval', 'joy', 'neutral', 'realization'],
-                'loudness': ['admiration', 'annoyance', 'disappointment', 'anger'],
-                'speechiness': ['desire', 'remorse', 'grief'],
-                'valence': ['gratitude', 'disapproval', 'embarrassment', 'nervousness']}
+                'energy': ['optimism', 'excitement', 'disgust', 'fear', 'anger'],
+                'liveness': ['love', 'approval', 'joy', 'neutral', 'realization','admiration'],
+                'speechiness': ['desire', 'remorse', 'grief', 'annoyance'],
+                'valence': ['gratitude', 'disapproval', 'embarrassment', 'nervousness', 'disappointment']}
+    pars_value = 'acousticness'
+
+    for key in slovaric:
+        t = slovaric[str(key)]
+        if text_emotion in str(t):
+            pars_value = str(key)
+
+
+    csv = pd.read_csv("music.csv").sort_values(pars_value, ascending=False).head(10)
+    music = list(pd.read_csv("music.csv").sort_values(pars_value, ascending=False).head(10).name)
+
+    path_music = music
+
+
+    print(path_music)
 
     # вернуть пути к файлам музыки
-    return 1111
+    return music
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -34,8 +57,19 @@ def get_text_messages(message):
             perevod = 'hi'
         text_emotion = text_analis(perevod)[0][0]['label']
         playlist = send_audio_play_list(text_emotion)
+
         # отослать плейлист
-        bot.send_message(message.from_user.id, text_emotion)
+        for m in playlist:
+            #bot.send_message(message.from_user.id, m)
+            try:
+                audio = open(gen_path(m), 'rb')
+                bot.send_audio(message.from_user.id, audio)
+                audio.close()
+            except Exception as e:
+                print(e)
+                pass
+        #bot.send_message(message.from_user.id, text_emotion)
+        #bot.send_message(message.from_user.id, playlist)
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -72,7 +106,17 @@ def photo(message):
     # ВОТ ТУТ определелено что находится на картиночке и эмоциональная окраска сообщения
     text_emotion = text_analis(what_in_pickture)[0][0]['label']
     print(text_emotion)
+
     playlist = send_audio_play_list(text_emotion)
+    for m in playlist:
+        #bot.send_message(message.from_user.id, m)
+        try:
+            audio = open(gen_path(m), 'rb')
+            bot.send_audio(message.from_user.id, audio)
+            audio.close()
+        except Exception as e:
+            print(e)
+            pass
     # отослать плейлист
 
 
