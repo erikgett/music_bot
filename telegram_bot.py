@@ -1,27 +1,29 @@
-from settings import bot
-from telegram_elements.keyboard import keyboard_bool, keyboard_menu
-from telegram_elements.messages import hello_message, creaters, help_message
+import os
+import random
+
+import pandas as pd
+
 from files_analisers.picture_analiser import pick_query
 from files_analisers.text_analiser import text_analis
-import random
-from googletrans import Translator
+from settings import bot
+from telegram_elements.keyboard import keyboard_menu
+from telegram_elements.messages import hello_message, creaters, help_message
 from trans import word_trans
-import pandas as pd
-import os
+
 
 def gen_path(name):
-
     print(os.getcwd())
-    pat = os.getcwd()+f'\\music\\{name}.mp3'
+    pat = os.getcwd() + f'\\music\\{name}.mp3'
     print(pat)
     return pat
+
 
 def send_audio_play_list(text_emotion):
     print(text_emotion)
     slovaric = {'acousticness': ['caring', 'confusion', 'sadness', 'pride', 'relief'],
                 'danceability': ['curiosity', 'amusement', 'surprise'],
                 'energy': ['optimism', 'excitement', 'disgust', 'fear', 'anger'],
-                'liveness': ['love', 'approval', 'joy', 'neutral', 'realization','admiration'],
+                'liveness': ['love', 'approval', 'joy', 'neutral', 'realization', 'admiration'],
                 'speechiness': ['desire', 'remorse', 'grief', 'annoyance'],
                 'valence': ['gratitude', 'disapproval', 'embarrassment', 'nervousness', 'disappointment']}
     pars_value = 'acousticness'
@@ -31,17 +33,15 @@ def send_audio_play_list(text_emotion):
         if text_emotion in str(t):
             pars_value = str(key)
 
-
-    csv = pd.read_csv("music.csv").sort_values(pars_value, ascending=False).head(10)
     music = list(pd.read_csv("music.csv").sort_values(pars_value, ascending=False).head(10).name)
 
     path_music = music
-
 
     print(path_music)
 
     # вернуть пути к файлам музыки
     return music
+
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -53,14 +53,14 @@ def get_text_messages(message):
         bot.send_message(message.from_user.id, 'Ваше сообщение обрабатывается, вскоре вы получите плейлист)')
         try:
             perevod = word_trans(message.text)
-        except Exception as e:
+        except:
             perevod = 'hi'
         text_emotion = text_analis(perevod)[0][0]['label']
         playlist = send_audio_play_list(text_emotion)
 
         # отослать плейлист
         for m in playlist:
-            #bot.send_message(message.from_user.id, m)
+            # bot.send_message(message.from_user.id, m)
             try:
                 audio = open(gen_path(m), 'rb')
                 bot.send_audio(message.from_user.id, audio)
@@ -68,8 +68,8 @@ def get_text_messages(message):
             except Exception as e:
                 print(e)
                 pass
-        #bot.send_message(message.from_user.id, text_emotion)
-        #bot.send_message(message.from_user.id, playlist)
+        # bot.send_message(message.from_user.id, text_emotion)
+        # bot.send_message(message.from_user.id, playlist)
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -109,7 +109,7 @@ def photo(message):
 
     playlist = send_audio_play_list(text_emotion)
     for m in playlist:
-        #bot.send_message(message.from_user.id, m)
+        # bot.send_message(message.from_user.id, m)
         try:
             audio = open(gen_path(m), 'rb')
             bot.send_audio(message.from_user.id, audio)
