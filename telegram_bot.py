@@ -9,6 +9,7 @@ from settings import bot
 from telegram_elements.keyboard import keyboard_menu
 from telegram_elements.messages import hello_message, creaters, help_message
 from trans import word_trans
+import pytest
 
 
 def gen_path(name):
@@ -47,7 +48,7 @@ def send_audio_play_list(text_emotion):
 def get_text_messages(message):
     if '/start' in message.text:
         bot.send_message(message.from_user.id, hello_message)
-        keyboard_menu(message)
+        keyboard_menu(message!)
     # Здесь у нас идет обработка текстового сообщения пользователя
     else:
         bot.send_message(message.from_user.id, 'Ваше сообщение обрабатывается, вскоре вы получите плейлист)')
