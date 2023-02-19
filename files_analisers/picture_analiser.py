@@ -1,6 +1,8 @@
 import requests
 import json
 from settings import hug_token
+import pytest
+
 
 API_URL = "https://api-inference.huggingface.co/models/microsoft/beit-base-patch16-224-pt22k-ft22k"
 headers = {"Authorization": f"Bearer {hug_token}"}
