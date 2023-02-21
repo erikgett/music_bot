@@ -6,7 +6,7 @@ import pytest
 API_URL = "https://api-inference.huggingface.co/models/bhadresh-savani/bert-base-go-emotion"
 headers = {"Authorization": f"Bearer {hug_token}"}
 def text_analis(message):
-    payload = {"inputs": message}
+    payload = {"inputs": message}Х
     response = requests.post(API_URL, headers=headers, json=payload)
     return response.json()
 def test_text_analis():
