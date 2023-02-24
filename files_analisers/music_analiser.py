@@ -15,5 +15,5 @@ def music_analis(filename):
 
 if __name__ == '__main__':
     import pprint
-    pprint.pprint(music_analis(r'\01. Felix Jaehn & Ray Dalton - Call It Love.mp3'))
 
+    pprint.pprint(music_analis(r'\01. Felix Jaehn & Ray Dalton - Call It Love.mp3'))

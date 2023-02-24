@@ -1,6 +1,7 @@
 from telebot import types
 from settings import bot
 
+
 # вызов данной клавиатуры это да и нет с вашим вопросом
 def keyboard_bool(message, question):
     '''
