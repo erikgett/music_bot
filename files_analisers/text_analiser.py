@@ -15,7 +15,7 @@ def text_analis(message):
 
 
 def test_text_analis():
-    assert text_analis('good')[0][0] == {'label': 'admiration', 'score': 0.7625299191474915}
+    assert text_analis('good')[0][0] == {'label': 'admiration', 'score': 0.7525299191474915}
 
 
 if __name__ == '__main__':
